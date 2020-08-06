@@ -3,12 +3,10 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", { structuredData: true });
-  response.send("hello, world");
-});
+const express = require('express');
+const app = express();
 
-exports.getScreams = functions.https.onRequest((req, res) => {
+app.get('/screams', (req, res) => {
   admin.firestore().collection('screams').get()
     .then(data => {
       let screams = [];
@@ -20,10 +18,7 @@ exports.getScreams = functions.https.onRequest((req, res) => {
     .catch(err => console.log(err));
 })
 
-exports.createScream = functions.https.onRequest((req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(400).json({ error: 'Method not allowed' })
-  }
+app.post('/scream', (req, res) => {
   const newScream = {
     name: req.body.name,
     do: req.body.do,
@@ -41,3 +36,7 @@ exports.createScream = functions.https.onRequest((req, res) => {
       console.log(err);
     })
 })
+
+// https://baseurl.com/api/
+
+exports.api = functions.https.onRequest(app);

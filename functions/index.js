@@ -7,11 +7,20 @@ const express = require('express');
 const app = express();
 
 app.get('/screams', (req, res) => {
-  admin.firestore().collection('screams').get()
+  admin
+    .firestore()
+    .collection('screams')
+    .orderBy('createAt', 'desc')
+    .get()
     .then(data => {
       let screams = [];
       data.forEach(doc => {
-        screams.push(doc.data());
+        screams.push({
+          screamId: doc.id,
+          userHandle: doc.data().userHandle,
+          body: doc.data().body,
+          ...doc.data()
+        });
       });
       return res.json(screams);
     })
@@ -20,9 +29,9 @@ app.get('/screams', (req, res) => {
 
 app.post('/scream', (req, res) => {
   const newScream = {
-    name: req.body.name,
-    do: req.body.do,
-    createAt: admin.firestore.Timestamp.fromDate(new Date())
+    userHandle: req.body.userHandle,
+    body: req.body.body,
+    createAt: new Date().toISOString()
   }
 
   admin.firestore()

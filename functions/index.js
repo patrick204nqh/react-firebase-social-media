@@ -1,14 +1,26 @@
+const firebase = require('firebase');
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-
-admin.initializeApp();
-
 const express = require('express');
 const app = express();
 
+const firebaseConfig = {
+  apiKey: "AIzaSyAmrGi-vGSoYU4AJiImy6uIzTIt9gGGzgQ",
+  authDomain: "social-media-9aa90.firebaseapp.com",
+  databaseURL: "https://social-media-9aa90.firebaseio.com",
+  projectId: "social-media-9aa90",
+  storageBucket: "social-media-9aa90.appspot.com",
+  messagingSenderId: "503353149603",
+  appId: "1:503353149603:web:f51ff43f50b9f89a5d1716",
+  measurementId: "G-43GTRCH2TB"
+};
+
+admin.initializeApp();
+firebase.initializeApp(firebaseConfig);
+const db = admin.firestore();
+
 app.get('/screams', (req, res) => {
-  admin
-    .firestore()
+  db
     .collection('screams')
     .orderBy('createAt', 'desc')
     .get()
@@ -34,7 +46,7 @@ app.post('/scream', (req, res) => {
     createAt: new Date().toISOString()
   }
 
-  admin.firestore()
+  db
     .collection('screams')
     .add(newScream)
     .then((doc) => {
@@ -46,6 +58,47 @@ app.post('/scream', (req, res) => {
     })
 })
 
-// https://baseurl.com/api/
+// Signup route
+app.post('/signup', (req, res) => {
+  const newUser = {
+    email: req.body.email,
+    password: req.body.password,
+    confirmPassword: req.body.confirmPassword,
+    handle: req.body.handle,
+  }
+
+  // TODO: validate data
+  db.doc(`/users/${newUser.handle}`).get()
+    .then(doc => {
+      if (doc.exists) {
+        return res.status(400).json({
+          handle: 'this handle is already taken'
+        })
+      } else {
+        return firebase
+          .auth()
+          .createUserWithEmailAndPassword(newUser.email, newUser.password);
+      }
+    })
+    .then(data => {
+      return data.user.getIdToken()
+    })
+    .then(token => {
+      return res.status(201).json({ token });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({ error: err.code })
+    })
+
+  firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password)
+    .then((data) => {
+      return res.status(201).json({ message: `user ${data.user.uid} signed up successfully` })
+    })
+    .catch(err => {
+      console.log(err)
+      return res.status(500).json({ error: err.code })
+    })
+})
 
 exports.api = functions.https.onRequest(app);

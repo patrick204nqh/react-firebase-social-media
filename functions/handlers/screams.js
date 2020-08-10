@@ -22,16 +22,21 @@ exports.getAllScreams = (req, res) => {
 
 exports.postOneScream = (req, res) => {
   const newScream = {
-    userHandle: req.user.handle,
     body: req.body.body,
-    createAt: new Date().toISOString()
+    userHandle: req.user.handle,
+    userImage: req.user.imageUrl,
+    createAt: new Date().toISOString(),
+    likeCount: 0,
+    commentCount: 0
   }
 
   db
     .collection('screams')
     .add(newScream)
     .then((doc) => {
-      res.json({ message: `document ${doc.id} create successfully` })
+      const resScream = newScream;
+      resScream.screamId = doc.id;
+      res.json(resScream)
     })
     .catch(err => {
       res.status(500).json({ error: `something went wrong` });
@@ -94,4 +99,49 @@ exports.commentOnScream = (req, res) => {
       console.log(err);
       res.status(500).json({ error: 'Something went wrong' });
     })
+}
+
+// Like a scream
+exports.likeScream = (req, res) => {
+  const likeDocument = db.collection('likes').where('userHandle', '==', req.user.handle)
+    .where('screamId', '==', req.params.screamId).limit(1);
+
+  const screamDocument = db.doc(`/screams/${req.params.screamId}`);
+
+  let screamData = {};
+
+  screamDocument.get()
+    .then(doc => {
+      if (doc.exists) {
+        screamData = doc.data();
+        screamData.screamId = doc.id;
+        return likeDocument.get();
+      } else {
+        return res.status(404).json({ error: 'Scream not found' });
+      }
+    })
+    .then(data => {
+      if (data.empty) {
+        return db.collection('likes').add({
+          screamId: req.params.screamId,
+          userHandle: req.user.handle
+        })
+          .then(() => {
+            screamData.likeCount++;
+            return screamDocument.update({ likeCount: screamData.likeCount });
+          })
+          .then(() => {
+            return res.json(screamData);
+          })
+      } else {
+        return res.status(400).json({ error: 'Scream already liked' })
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ error: err.code });
+    })
+}
+
+exports.unlikeScream = (req, res) => {
+
 }

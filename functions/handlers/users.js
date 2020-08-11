@@ -3,7 +3,6 @@ const firebase = require('firebase');
 
 const firebaseConfig = require('../util/config');
 const { validateSignupData, validateLoginData, reduceUserDetails } = require('../util/validators');
-const { user, UserRecordMetadata } = require('firebase-functions/lib/providers/auth');
 
 firebase.initializeApp(firebaseConfig);
 
@@ -103,7 +102,29 @@ exports.addUserDetails = (req, res) => {
     })
 }
 
-// Get user details
+// Get any user's details
+// exports.getUserDetails = (req, res) => {
+//   let userData = {};
+//   db.doc(`/users/${req.params.handle}`).get()
+//     .then(doc => {
+//       if (doc.exists) {
+//         userData.user = doc.data();
+//         return db.collection('screams').where('userHandle', '==', req.params.handle)
+//           .orderBy('createAt', 'desc')
+//           .get();
+//       }
+//     })
+//     .then(data => {
+//       userData.screams = [];
+//       data.forEach(doc => {
+//         userData.screams.push({
+//           body: doc.data().body,
+//         })
+//       })
+//     })
+// }
+
+// Get own user details
 exports.getAuthenticatedUser = (req, res) => {
   let userData = {};
   db.doc(`/users/${req.user.handle}`).get()
@@ -115,9 +136,28 @@ exports.getAuthenticatedUser = (req, res) => {
       }
     })
     .then(data => {
-      userData.like = [];
+      userData.likes = [];
       data.forEach(doc => {
         userData.likes.push(doc.data());
+      });
+      return db.collection('notifications')
+        .where('recipient', '==', req.user.handle)
+        .orderBy('createAt', 'desc')
+        .limit(10)
+        .get();
+    })
+    .then(data => {
+      userData.notifications = [];
+      data.forEach(doc => {
+        userData.notifications.push({
+          recipient: doc.data().recipient,
+          sender: doc.data().sender,
+          createAt: doc.data().createAt,
+          screamId: doc.data().screamId,
+          type: doc.data().type,
+          read: doc.data().read,
+          notificationId: doc.id
+        });
       });
       return res.json(userData);
     })

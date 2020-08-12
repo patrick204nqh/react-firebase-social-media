@@ -63,10 +63,10 @@ exports.getScream = (req, res) => {
         .where('screamId', '==', req.params.screamId)
         .get();
     })
-    .then(data => {
+    .then((data) => {
       screamData.comments = [];
-      data.forEach(doc => {
-        screamData.comments.push(doc.data())
+      data.forEach((doc) => {
+        screamData.comments.push(doc.data());
       });
       return res.json(screamData);
     })

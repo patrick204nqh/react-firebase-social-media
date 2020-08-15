@@ -24,6 +24,8 @@ class Signup extends Component {
     this.state = {
       email: '',
       password: '',
+      confirmPassword: '',
+      handle: '',
       loading: false,
       errors: {}
     }
@@ -34,13 +36,16 @@ class Signup extends Component {
     this.setState({
       loading: true
     });
-    const userData = {
+    const newUserData = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword,
+      handle: this.state.handle
     }
-    axios.post('/login', userData)
+    axios.post('/signup', newUserData)
       .then(res => {
         console.log(res.data);
+        localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
         this.setState({
           loading: false
         });

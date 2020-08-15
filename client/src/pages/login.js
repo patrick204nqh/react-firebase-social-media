@@ -15,7 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 
 const styles = (theme) => ({
-  ...theme
+  ...theme.myCustom
 })
 
 class Login extends Component {
@@ -107,7 +107,7 @@ class Login extends Component {
               variant="contained"
               color="primary"
               className={classes.button}
-              disable={loading}
+              disable={loading.toString()}
             >
               Login
               {loading && (

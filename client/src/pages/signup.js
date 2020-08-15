@@ -15,7 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 
 const styles = (theme) => ({
-  ...theme
+  ...theme.myCustom
 })
 
 class Signup extends Component {
@@ -101,6 +101,30 @@ class Signup extends Component {
               onChange={this.handleChange}
               fullWidth
             />
+            <TextField
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              className={classes.textField}
+              helperText={errors.confirmPassword}
+              error={errors.confirmPassword ? true : false}
+              value={this.state.confirmPassword}
+              onChange={this.handleChange}
+              fullWidth
+            />
+            <TextField
+              id="handle"
+              name="handle"
+              type="text"
+              label="Handle"
+              className={classes.textField}
+              helperText={errors.handle}
+              error={errors.handle ? true : false}
+              value={this.state.handle}
+              onChange={this.handleChange}
+              fullWidth
+            />
             {errors.general && (
               <Typography variant="body2" className={classes.customError}>
                 {errors.general}
@@ -111,7 +135,7 @@ class Signup extends Component {
               variant="contained"
               color="primary"
               className={classes.button}
-              disable={loading}
+              disable={loading.toString()}
             >
               Signup
               {loading && (

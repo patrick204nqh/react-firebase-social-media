@@ -9,8 +9,10 @@ import {
   Grid,
   Typography,
   TextField,
-  Button
+  Button,
+  CircularProgress
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const styles = {
   form: {
@@ -28,10 +30,15 @@ const styles = {
   },
   button: {
     marginTop: 20,
+    position: 'relative'
   },
   customError: {
     color: 'red',
-    fontSize: '0.8rem'
+    fontSize: '0.8rem',
+    marginTop: 10
+  },
+  progress: {
+    position: 'absolute'
   }
 }
 
@@ -125,9 +132,15 @@ class Login extends Component {
               variant="contained"
               color="primary"
               className={classes.button}
+              disable={loading}
             >
               Login
+              {loading && (
+                <CircularProgress size={30} className={classes.progress} />
+              )}
             </Button>
+            <br />
+            <small>don't have an account ? sign up <Link to="/signup">here</Link></small>
           </form>
         </Grid>
         <Grid item sm />

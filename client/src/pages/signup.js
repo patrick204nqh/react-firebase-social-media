@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import PropsTypes from 'prop-types';
 import AppIcon from '../images/icon.png';
@@ -12,7 +13,9 @@ import {
   Button,
   CircularProgress
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+// Redux stuff
+import { connect } from 'react-redux';
+import { signupUser } from '../redux/actions/userActions';
 
 const styles = (theme) => ({
   ...theme.myCustom
@@ -42,21 +45,7 @@ class Signup extends Component {
       confirmPassword: this.state.confirmPassword,
       handle: this.state.handle
     }
-    axios.post('/signup', newUserData)
-      .then(res => {
-        console.log(res.data);
-        localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
-        this.setState({
-          loading: false
-        });
-        this.props.history.push('/');
-      })
-      .catch(err => {
-        this.setState({
-          errors: err.response.data,
-          loading: false
-        })
-      })
+    this.props.signupUser(newUserData, this.props.history);
   }
 
   handleChange = (e) => {
@@ -153,7 +142,18 @@ class Signup extends Component {
 }
 
 Signup.propTypes = {
-  classes: PropsTypes.object.isRequired
+  classes: PropsTypes.object.isRequired,
+  user: PropsTypes.object.isRequired,
+  UI: PropsTypes.object.isRequired,
+  signupUser: PropsTypes.func.isRequired
 }
 
-export default withStyles(styles)(Signup);
+const mapStateToProps = state => ({
+  user: state.user,
+  UI: state.UI
+});
+
+export default connect(
+  mapStateToProps,
+  { signupUser }
+)(withStyles(styles)(Signup));

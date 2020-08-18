@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import PropsTypes from 'prop-types';
 import AppIcon from '../images/icon.png';
-import axios from 'axios';
 
 // MUI Stuff
 import {
@@ -29,16 +28,19 @@ class Signup extends Component {
       password: '',
       confirmPassword: '',
       handle: '',
-      loading: false,
       errors: {}
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.UI.errors) {
+      this.setState({ errors: nextProps.UI.errors });
     }
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-      loading: true
-    });
+
     const newUserData = {
       email: this.state.email,
       password: this.state.password,
@@ -55,8 +57,8 @@ class Signup extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const { errors, loading } = this.state;
+    const { classes, UI: { loading } } = this.props;
+    const { errors } = this.state;
     return (
       <Grid container className={classes.form}>
         <Grid item sm />

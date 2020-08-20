@@ -6,7 +6,14 @@ import MyButton from '../util/MyButton';
 import { connect } from 'react-redux';
 import { editUserDetails } from '../redux/actions/userActions';
 // MUI Stuff
-import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from '@material-ui/core';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
+  Button
+} from '@material-ui/core';
 //Icons
 import EditIcon from '@material-ui/icons/Edit';
 

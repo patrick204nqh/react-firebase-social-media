@@ -33,6 +33,10 @@ exports.postOneScream = (req, res) => {
     commentCount: 0
   }
 
+  if (!newScream.body) {
+    res.status(400).json({ body: 'Body must not be empty' })
+  }
+
   db
     .collection('screams')
     .add(newScream)

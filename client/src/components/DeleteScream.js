@@ -81,4 +81,4 @@ const mapStateToProps = state => ({
 
 })
 
-export default connect(mapStateToProps, { deleteScream })((withStyles(styles)(DeleteScream)));
+export default connect(mapStateToProps, { deleteScream })(withStyles(styles)(DeleteScream));

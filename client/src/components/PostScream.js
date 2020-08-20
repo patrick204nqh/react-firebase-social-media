@@ -45,12 +45,16 @@ class PostScream extends Component {
         errors: nextProps.UI.errors
       })
     }
+    if (!nextProps.UI.errors && !nextProps.UI.loading) {
+      this.setState({ body: '' });
+      this.handleClose();
+    }
   }
   handleOpen = () => {
     this.setState({ open: true });
   }
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, errors: {} });
   }
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });

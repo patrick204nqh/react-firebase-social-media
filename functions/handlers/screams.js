@@ -35,20 +35,21 @@ exports.postOneScream = (req, res) => {
 
   if (!newScream.body) {
     res.status(400).json({ body: 'Body must not be empty' })
+  } else {
+    db
+      .collection('screams')
+      .add(newScream)
+      .then((doc) => {
+        const resScream = newScream;
+        resScream.screamId = doc.id;
+        res.json(resScream)
+      })
+      .catch(err => {
+        res.status(500).json({ error: `something went wrong` });
+        console.log(err);
+      })
   }
 
-  db
-    .collection('screams')
-    .add(newScream)
-    .then((doc) => {
-      const resScream = newScream;
-      resScream.screamId = doc.id;
-      res.json(resScream)
-    })
-    .catch(err => {
-      res.status(500).json({ error: `something went wrong` });
-      console.log(err);
-    })
 }
 
 // Fetch one scream

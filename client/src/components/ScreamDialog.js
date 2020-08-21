@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   CircularProgress,
   Grid,
   Typography
@@ -42,6 +41,11 @@ const styles = (theme) => ({
   expandButton: {
     position: 'absolute',
     left: '90%'
+  },
+  spinnerDiv: {
+    textAlign: 'center',
+    marginTop: 50,
+    marginBottom: 50
   }
 })
 
@@ -75,7 +79,9 @@ class ScreamDialog extends Component {
     } = this.props;
 
     const dialogMarkup = loading ? (
-      <CircularProgress size={200} />
+      <div className={classes.spinnerDiv}>
+        <CircularProgress size={200} thickness={2} />
+      </div>
     ) : (
         <Grid container spacing={16}>
           <Grid item sm={5}>

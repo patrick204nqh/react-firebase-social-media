@@ -43,7 +43,7 @@ exports.signup = (req, res) => {
       const userCredentials = {
         handle: newUser.handle,
         email: newUser.email,
-        createAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${noImg}?alt=media`,
         userId
       };
@@ -111,7 +111,7 @@ exports.getUserDetails = (req, res) => {
       if (doc.exists) {
         userData.user = doc.data();
         return db.collection('screams').where('userHandle', '==', req.params.handle)
-          .orderBy('createAt', 'desc')
+          .orderBy('createdAt', 'desc')
           .get();
       } else {
         return res.status(404).json({ error: 'User not found' });
@@ -156,7 +156,7 @@ exports.getAuthenticatedUser = (req, res) => {
       });
       return db.collection('notifications')
         .where('recipient', '==', req.user.handle)
-        .orderBy('createAt', 'desc')
+        .orderBy('createdAt', 'desc')
         .limit(10)
         .get();
     })
@@ -166,7 +166,7 @@ exports.getAuthenticatedUser = (req, res) => {
         userData.notifications.push({
           recipient: doc.data().recipient,
           sender: doc.data().sender,
-          createAt: doc.data().createAt,
+          createdAt: doc.data().createdAt,
           screamId: doc.data().screamId,
           type: doc.data().type,
           read: doc.data().read,

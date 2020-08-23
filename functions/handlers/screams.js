@@ -3,7 +3,7 @@ const { db } = require('../util/admin');
 exports.getAllScreams = (req, res) => {
   db
     .collection('screams')
-    .orderBy('createAt', 'desc')
+    .orderBy('createdAt', 'desc')
     .get()
     .then(data => {
       let screams = [];
@@ -12,9 +12,9 @@ exports.getAllScreams = (req, res) => {
           screamId: doc.id,
           body: doc.data().body,
           userHandle: doc.data().userHandle,
-          createAt: doc.data().createAt,
+          createdAt: doc.data().createdAt,
           commentCount: doc.data().commentCount,
-          likeCount: doc.data().commentCount,
+          likeCount: doc.data().likeCount,
           userImage: doc.data().userImage
         });
       });
@@ -28,7 +28,7 @@ exports.postOneScream = (req, res) => {
     body: req.body.body,
     userHandle: req.user.handle,
     userImage: req.user.imageUrl,
-    createAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
     likeCount: 0,
     commentCount: 0
   }
@@ -88,7 +88,7 @@ exports.commentOnScream = (req, res) => {
 
   const newComment = {
     body: req.body.body,
-    createAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
     screamId: req.params.screamId,
     userHandle: req.user.handle,
     userImage: req.user.imageUrl

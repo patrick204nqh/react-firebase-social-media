@@ -50,7 +50,7 @@ exports.createNotificationOnLike = functions.firestore
       .then(doc => {
         if (doc.exists && doc.data().userHandle !== snapshot.data().userHandle) {
           return db.doc(`/notifications/${snapshot.id}`).set({
-            createAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
             recipient: doc.data().userHandle,
             sender: snapshot.data().userHandle,
             type: 'like',
@@ -83,7 +83,7 @@ exports.createNotificationOnComment = functions
       .then(doc => {
         if (doc.exists && doc.data().userHandle !== snapshot.data().userHandle) {
           return db.doc(`/notifications/${snapshot.id}`).set({
-            createAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
             recipient: doc.data().userHandle,
             sender: snapshot.data().userHandle,
             type: 'comment',

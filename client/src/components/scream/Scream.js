@@ -88,7 +88,7 @@ class Scream extends Component {
             {body}
           </Typography>
           <LikeButton screamId={screamId} />
-          <span>{likeCount} Likes</span>
+          <span>{likeCount} likes</span>
           <MyButton tip="comment">
             <ChatIcon color="primary" />
           </MyButton>

@@ -22,7 +22,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 import { UnfoldMore } from '@material-ui/icons';
 // Redux Stuff
 import { connect } from 'react-redux';
-import { getScream } from '../../redux/actions/dataActions';
+import { getScream, clearErrors } from '../../redux/actions/dataActions';
 
 const styles = (theme) => ({
   ...theme.myCustom,
@@ -61,6 +61,7 @@ class ScreamDialog extends Component {
   }
   handleClose = () => {
     this.setState({ open: false });
+    this.props.clearErrors();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.scream.comments) {
@@ -157,6 +158,7 @@ class ScreamDialog extends Component {
 }
 
 ScreamDialog.propTypes = {
+  clearErrors: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   getScream: PropTypes.func.isRequired,
   screamId: PropTypes.string.isRequired,
@@ -171,7 +173,8 @@ const mapStateToProps = state => ({
 });
 
 const mapActionsToProps = {
-  getScream
+  getScream,
+  clearErrors
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(ScreamDialog));

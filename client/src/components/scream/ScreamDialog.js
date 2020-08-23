@@ -70,7 +70,6 @@ class ScreamDialog extends Component {
   }
 
   render() {
-    console.log(this.props.scream.comments);
     const {
       classes,
       scream: {

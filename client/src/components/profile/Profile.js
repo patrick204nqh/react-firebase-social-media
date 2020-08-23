@@ -83,7 +83,7 @@ class Profile extends Component {
     const {
       classes,
       user: {
-        credentials: { handle, createAt, imageUrl, bio, website, location },
+        credentials: { handle, createdAt, imageUrl, bio, website, location },
         loading,
         authenticated
       },
@@ -131,7 +131,7 @@ class Profile extends Component {
                   </>
                 )}
                 <CalendarToday color="primary" />{' '}
-                <span>Joined {dayjs(createAt).format('MMM YYYY')}</span>
+                <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
               </div>
               <MyButton tip="Logout" onClick={this.handleLogout}>
                 <KeyboardReturn color="primary" />

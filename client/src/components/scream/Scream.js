@@ -46,7 +46,7 @@ class Scream extends Component {
       classes,
       scream: {
         body,
-        createAt,
+        createdAt,
         userImage,
         userHandle,
         screamId,
@@ -75,14 +75,14 @@ class Scream extends Component {
           <Typography
             variant="h5"
             component={Link}
-            to={`/users/${userHandle}`}
+            to={`/user/${userHandle}`}
             color="primary"
           >
             {userHandle}
           </Typography>
           {deleteButton}
           <Typography variant="body2" color="textSecondary">
-            {dayjs(createAt).fromNow()}
+            {dayjs(createdAt).fromNow()}
           </Typography>
           <Typography variant="body1">
             {body}

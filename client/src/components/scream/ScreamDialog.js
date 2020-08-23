@@ -52,7 +52,8 @@ const styles = (theme) => ({
 
 class ScreamDialog extends Component {
   state = {
-    open: false
+    open: false,
+    comments: [],
   }
   handleOpen = () => {
     this.setState({ open: true });
@@ -61,8 +62,14 @@ class ScreamDialog extends Component {
   handleClose = () => {
     this.setState({ open: false });
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.scream.comments) {
+      this.setState({ comments: nextProps.scream.comments })
+    }
+  }
 
   render() {
+    console.log(this.props.scream.comments);
     const {
       classes,
       scream: {
@@ -73,7 +80,7 @@ class ScreamDialog extends Component {
         commentCount,
         userImage,
         userHandle,
-        comments
+        // comments
       },
       UI: {
         loading
@@ -115,7 +122,7 @@ class ScreamDialog extends Component {
           </Grid>
           <hr className={classes.visibleSeparator} />
           <CommentForm screamId={screamId} />
-          <Comments comments={comments} />
+          <Comments comments={this.state.comments} />
         </Grid>
       )
     return (

@@ -6,7 +6,6 @@ import { Button, Grid, TextField } from '@material-ui/core';
 // Redux Stuff
 import { connect } from 'react-redux';
 import { submitComment } from '../../redux/actions/dataActions';
-import { ErrorSharp } from '@material-ui/icons';
 
 const styles = theme => ({
   ...theme.myCustom,

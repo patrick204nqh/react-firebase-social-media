@@ -6,6 +6,8 @@ import { Grid } from '@material-ui/core';
 import Scream from '../components/scream/Scream';
 import Profile from '../components/profile/Profile';
 
+import ScreamSkeleton from '../util/ScreamSkeleton';
+
 import { connect } from 'react-redux';
 import { getScreams } from '../redux/actions/dataActions';
 
@@ -20,7 +22,7 @@ class home extends Component {
         screams.map(scream => (
           <Scream scream={scream} key={scream.screamId} />
         )))
-      : (<p>Loading...</p>);
+      : (<ScreamSkeleton />);
     return (
       <Grid container spacing={0}>
         <Grid item sm={8} xs={12}>

@@ -54,18 +54,36 @@ class ScreamDialog extends Component {
   state = {
     open: false,
     comments: [],
+    oldPath: '',
+    newPath: ''
   }
   handleOpen = () => {
-    this.setState({ open: true });
+    let oldPath = window.location.pathname;
+
+    const { userHandle, screamId } = this.props;
+    const newPath = `/users/${userHandle}/scream/${screamId}`;
+
+    if (oldPath === newPath) oldPath = `/users/${userHandle}`;
+
+    window.history.pushState(null, null, newPath);
+
+    this.setState({ open: true, oldPath, newPath });
     this.props.getScream(this.props.screamId)
   }
   handleClose = () => {
+    window.history.pushState(null, null, this.state.oldPath);
+
     this.setState({ open: false });
     this.props.clearErrors();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.scream.comments) {
       this.setState({ comments: nextProps.scream.comments })
+    }
+  }
+  componentDidMount() {
+    if (this.props.openDialog) {
+      this.handleOpen();
     }
   }
 
@@ -80,7 +98,6 @@ class ScreamDialog extends Component {
         commentCount,
         userImage,
         userHandle,
-        // comments
       },
       UI: {
         loading
@@ -92,7 +109,7 @@ class ScreamDialog extends Component {
         <CircularProgress size={200} thickness={2} />
       </div>
     ) : (
-        <Grid container spacing={16}>
+        <Grid container spacing={2}>
           <Grid item sm={5}>
             <img src={userImage} alt="Profile" className={classes.profileImage} />
           </Grid>
